@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# 📘 Stacks WalletConnect Web Wallet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **Stacks-only WalletConnect v2 web wallet** built using **React + Vite** and **Reown WalletKit**.
 
-Currently, two official plugins are available:
+This project demonstrates how a WalletConnect-compatible Stacks wallet:
+- Receives session proposals  
+- Approves Stacks namespaces  
+- Exposes a Stacks address  
+- Routes signing requests to installed wallets (e.g. Leather)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> ⚠️ **Note:** This is a learning and demo wallet. It does **not** manage private keys or sign transactions internally.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
 
-## Expanding the ESLint configuration
+- WalletConnect v2 integration  
+- Stacks namespace support (`stacks:mainnet`)  
+- Session proposal handling  
+- Active session management (connect / disconnect)  
+- Works with **AppKit Lab** and **Stacks dApps**  
+- Clean separation of wallet logic and UI  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🧠 How It Works (Important)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **WalletConnect** acts as the transport layer between your wallet and dApps  
+- **Session approval** is implemented inside `walletKit.ts`  
+- **Signing is delegated** to installed wallets like **Leather**  
+- Your app functions as a WalletConnect-compatible **wallet shell**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Then open the app at:  
+👉 [http://localhost:5174](http://localhost:5174)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🧪 Testing the Wallet
+
+Use **AppKit Lab** for integration testing:  
+👉 [https://lab.reown.com](https://lab.reown.com)
+
+1. Choose **Custom Wallet**  
+2. Paste your wallet URL (e.g. `http://localhost:5174`)  
+3. Connect  
+4. Approve the session automatically  
+5. Perform a transaction in the dApp  
+6. The installed wallet (e.g. **Leather**) will pop up for signing  
+
+✅ This confirms the WalletConnect flow is functioning correctly.
+
+---
+
+## ❓ Why Does Leather Pop Up?
+
+This wallet:
+- Approves WalletConnect sessions  
+- Exposes a Stacks address  
+- Does **not** sign transactions  
+
+Therefore, WalletConnect forwards signing requests to the wallet that **owns the private key (Leather)** for secure signing.
+
+---
+
+## 📚 References
+
+- WalletConnect Docs: [https://docs.walletconnect.network](https://docs.walletconnect.network)  
+- Reown WalletKit Docs: [https://docs.reown.com](https://docs.reown.com)  
+- Stacks Documentation: [https://docs.stacks.co](https://docs.stacks.co)
+
+---
+
+## 🧑‍💻 Author
+
+Built for learning **WalletConnect + Stacks integration**.  
+
+
+
