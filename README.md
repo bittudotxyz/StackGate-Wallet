@@ -23,6 +23,10 @@ This project demonstrates how a WalletConnect-compatible Stacks wallet:
 
 ---
 
+**Documentation:** https://stackgatewallet.netlify.app/
+
+---
+
 ## 🧠 How It Works (Important)
 
 - **WalletConnect** acts as the transport layer between your wallet and dApps  
