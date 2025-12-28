@@ -1,10 +1,12 @@
 import { walletKit } from "./walletKit";
 
 walletKit.on("session_request", async (event) => {
-  const { topic, id, params } = event;
+  const { topic, params, id } = event;
   const { request } = params;
 
-  // 🟣 STacks: return address
+  console.log("📨 Incoming request:", request.method, request.params);
+
+  /* ---------------- GET ADDRESSES ---------------- */
   if (request.method === "stx_getAddresses") {
     await walletKit.respondSessionRequest({
       topic,
@@ -21,5 +23,23 @@ walletKit.on("session_request", async (event) => {
         },
       },
     });
+
+    console.log("✅ Address sent to dApp");
+  }
+
+  /* ---------------- SIGN MESSAGE ---------------- */
+  if (request.method === "stx_signMessage") {
+    console.log("🖊️ Message signing requested");
+
+    // Leather will pop up automatically
+    // because it controls the private key
+  }
+
+  /* ---------------- TRANSFER ---------------- */
+  if (request.method === "stx_transferStx") {
+    console.log("💸 Transfer request received");
+
+    // Leather UI popup is NORMAL
+    // WalletConnect just relays the request
   }
 });

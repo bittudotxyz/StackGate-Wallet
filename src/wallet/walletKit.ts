@@ -1,9 +1,6 @@
 import { Core } from "@walletconnect/core";
 import { WalletKit } from "@reown/walletkit";
 
-const STACKS_ADDRESS =
-  "SPKS3DCP8441609AZ0REZ7VWTK5ECGXE8ADVXBM8";
-
 const core = new Core({
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
 });
@@ -11,19 +8,23 @@ const core = new Core({
 export const walletKit = await WalletKit.init({
   core,
   metadata: {
-    name: "My Stacks Web Wallet",
-    description: "Stacks-only WalletConnect Web Wallet",
+    name: "StackGate Wallet",
+    description: "Stacks WalletConnect Web Wallet",
     url: window.location.origin,
     icons: [],
   },
 });
 
+/* ---------------- SESSION PROPOSAL ---------------- */
 
 walletKit.on("session_proposal", async (proposal) => {
   console.log("📩 Session proposal received", proposal);
 
-  try {
-    const namespaces = {
+  const { id } = proposal;
+
+  await walletKit.approveSession({
+    id,
+    namespaces: {
       stacks: {
         chains: ["stacks:mainnet"],
         methods: [
@@ -33,26 +34,16 @@ walletKit.on("session_proposal", async (proposal) => {
         ],
         events: [],
         accounts: [
-          `stacks:mainnet:${STACKS_ADDRESS}`,
+          "stacks:mainnet:SPKS3DCP8441609AZ0REZ7VWTK5ECGXE8ADVXBM8",
         ],
       },
-    };
+    },
+  });
 
-    await walletKit.approveSession({
-      id: proposal.id,
-      namespaces,
-    });
+  console.log("✅ Stacks session approved");
 
-    console.log("✅ Stacks session approved");
-  } catch (err) {
-    console.error("❌ Session approval failed", err);
-
-    await walletKit.rejectSession({
-      id: proposal.id,
-      reason: {
-        code: 5000,
-        message: "User rejected",
-      },
-    });
-  }
+  // 🔔 ADD THIS (UI refresh trigger)
+  window.dispatchEvent(
+    new Event("walletconnect_session_updated")
+  );
 });
